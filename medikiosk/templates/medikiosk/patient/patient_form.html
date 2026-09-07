@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Patient Case-Taking Form</title>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 40px 20px;
+    background: #f3f6f8;
+    color: #263238;
+    line-height: 1.5;
+  }
+
+  h1 {
+    max-width: 760px;
+    margin: 0 auto 24px;
+    padding: 22px 28px;
+    background: #ffffff;
+    border: 1px solid #d8e0e5;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+
+  form {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 30px 32px 36px;
+    background: #ffffff;
+    border: 1px solid #d8e0e5;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+  }
+
+  h2 {
+    margin: 30px 0 18px;
+    padding: 12px 14px;
+    background: #f5f8fa;
+    border: 1px solid #dce4e8;
+    border-left: 4px solid #3f5f80;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #304b63;
+  }
+
+  h2:first-of-type { margin-top: 0; }
+
+  .field {
+    margin: 0 0 20px;
+    padding: 18px 18px 20px;
+    background: #fbfcfd;
+    border: 1px solid #e0e6ea;
+    border-radius: 9px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .field:focus-within {
+    border-color: #8fa9bd;
+    box-shadow: 0 0 0 3px rgba(63, 95, 128, 0.08);
+  }
+
+  label {
+    display: block;
+    margin: 0 0 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #303b43;
+  }
+
+  .required { color: #c0392b; }
+
+  .meaning {
+    display: block;
+    margin: -1px 0 11px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #6d7982;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin: 0 0 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #263238;
+    background: #ffffff;
+    border: 1px solid #c8d1d7;
+    border-radius: 7px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: #5b7fa6;
+    box-shadow: 0 0 0 3px rgba(91, 127, 166, 0.12);
+  }
+
+  textarea {
+    min-height: 90px;
+    resize: vertical;
+  }
+
+  .select-wrap select {
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+
+  form > label {
+    margin-top: 16px;
+  }
+
+  form > input,
+  form > textarea,
+  form > select {
+    margin-bottom: 8px;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    background: #3f5f80;
+    color: #fff;
+    border: 1px solid #35516c;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+
+  button:hover { background: #35516c; }
+  button:active { transform: translateY(1px); }
+
+  @media (max-width: 600px) {
+    body { padding: 20px 12px; }
+    h1 { padding: 18px 20px; font-size: 21px; }
+    form { padding: 22px 18px 28px; }
+    .field { padding: 15px; }
+  }
+</style>
+</head>
+<body>
+ 
+<h1>Patient Case-Taking Form</h1>
+ 
+<form method="POST" action="{% url 'patient_form' %}">
+    { % csrf_token % }
+ 
+  <h2>Basic Details</h2>
+ 
+  <label for="name">Full Name <span class="required">*</span></label>
+  <input type="text" id="name" name="name" required>
+ 
+  <label for="age">Age <span class="required">*</span></label>
+  <input type="number" id="age" name="age" required>
+ 
+  <label for="gender">Gender <span class="required">*</span></label>
+  <select id="gender" name="gender" required>
+    <option value="">Select</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+    <option value="other">Other</option>
+  </select>
+ 
+  <label for="contact">Contact Number <span class="required">*</span></label>
+  <input type="tel" id="contact" name="contact" required>
+ 
+  <label for="address">Address <span class="required">*</span></label>
+  <textarea id="address" name="address" required></textarea>
+ 
+  <label for="abha">ABHA ID</label>
+  <input type="text" id="abha" name="abha">
+ 
+  <label for="complaint">Chief Complaint <span class="required">*</span></label>
+  <textarea id="complaint" name="complaint" required></textarea>
+ 
+  <h2>Dashavidha Pariksha (Ten Examinations)</h2>
+ 
+  <div class="field">
+    <label>1. Prakriti <span class="required">*</span></label>
+    <span class="meaning">Constitution — the individual's inborn dosha-based body-mind type, fixed at birth.</span>
+    <div class="select-wrap">
+      <select name="prakriti" required>
+        <option value="" disabled selected>Select Constitution</option>
+        <option value="vata">Vata (Air + Space)</option>
+        <option value="pitta">Pitta (Fire + Water)</option>
+        <option value="kapha">Kapha (Earth + Water)</option>
+        <option value="vata_pitta">Vata-Pitta (Air-Space + Fire-Water)</option>
+        <option value="pitta_kapha">Pitta-Kapha (Fire-Water + Earth-Water)</option>
+        <option value="vata_kapha">Vata-Kapha (Air-Space + Earth-Water)</option>
+        <option value="tridoshaja">Tridoshaja (all three balanced)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>2. Vikriti <span class="required">*</span></label>
+    <span class="meaning">Pathology — the current imbalance of doshas caused by disease, as opposed to the baseline Prakriti.</span>
+    <div class="select-wrap">
+      <select name="vikriti" required>
+        <option value="" disabled selected>Select Pathological State</option>
+        <option value="vata">Vata Vikriti (Air + Space)</option>
+        <option value="pitta">Pitta Vikriti (Fire + Water)</option>
+        <option value="kapha">Kapha Vikriti (Earth + Water)</option>
+        <option value="dwidoshaja">Dwidoshaja (two doshas involved)</option>
+        <option value="sannipataja">Sannipataja (all three doshas involved)</option>
+        <option value="none">No significant Vikriti</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>3. Sara <span class="required">*</span></label>
+    <span class="meaning">Tissue quality — the degree of excellence of the seven bodily tissues (dhatus).</span>
+    <div class="select-wrap">
+      <select name="sara" required>
+        <option value="" disabled selected>Select Tissue Quality</option>
+        <option value="pravara">Pravara (excellent)</option>
+        <option value="madhyama">Madhyama (moderate)</option>
+        <option value="avara">Avara (poor)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>4. Samhanana <span class="required">*</span></label>
+    <span class="meaning">Compactness — how well-knit and firm the body frame and joints are.</span>
+    <div class="select-wrap">
+      <select name="samhanana" required>
+        <option value="" disabled selected>Select Compactness</option>
+        <option value="pravara">Pravara (well-compact, firm)</option>
+        <option value="madhyama">Madhyama (moderate)</option>
+        <option value="avara">Avara (loose, poor)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>5. Pramana <span class="required">*</span></label>
+    <span class="meaning">Measurements — the body's proportions and dimensions relative to ideal standards.</span>
+    <div class="select-wrap">
+      <select name="pramana" required>
+        <option value="" disabled selected>Select Measurement Status</option>
+        <option value="pravara">Pravara (proportionate, adequate)</option>
+        <option value="madhyama">Madhyama (moderate)</option>
+        <option value="avara">Avara (disproportionate, inadequate)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>6. Satmya <span class="required">*</span></label>
+    <span class="meaning">Adaptability — how well the person tolerates and adjusts to foods, climates, and circumstances.</span>
+    <div class="select-wrap">
+      <select name="satmya" required>
+        <option value="" disabled selected>Select Adaptability</option>
+        <option value="pravara">Pravara (high adaptability)</option>
+        <option value="madhyama">Madhyama (moderate adaptability)</option>
+        <option value="avara">Avara (low adaptability)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>7. Satva <span class="required">*</span></label>
+    <span class="meaning">Mental strength — the clarity, courage, and psychological resilience of the mind.</span>
+    <div class="select-wrap">
+      <select name="satva" required>
+        <option value="" disabled selected>Select Mental Strength</option>
+        <option value="pravara">Pravara (strong)</option>
+        <option value="madhyama">Madhyama (moderate)</option>
+        <option value="avara">Avara (weak)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>8. Ahara Shakti <span class="required">*</span></label>
+    <span class="meaning">Digestive capacity — the strength of Agni (digestive fire) and the amount of food one can properly digest.</span>
+    <div class="select-wrap">
+      <select name="ahara_shakti" required>
+        <option value="" disabled selected>Select Digestive Capacity</option>
+        <option value="pravara">Pravara (strong Agni)</option>
+        <option value="madhyama">Madhyama (moderate Agni)</option>
+        <option value="avara">Avara (weak Agni)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>9. Vyayama Shakti <span class="required">*</span></label>
+    <span class="meaning">Exercise capacity — the physical stamina and tolerance for exertion.</span>
+    <div class="select-wrap">
+      <select name="vyayama_shakti" required>
+        <option value="" disabled selected>Select Exercise Capacity</option>
+        <option value="pravara">Pravara (high capacity)</option>
+        <option value="madhyama">Madhyama (moderate capacity)</option>
+        <option value="avara">Avara (low capacity)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>10. Vaya <span class="required">*</span></label>
+    <span class="meaning">Age category — the patient's stage of life, which affects dosha dominance and treatment approach.</span>
+    <div class="select-wrap">
+      <select name="vaya" required>
+        <option value="" disabled selected>Select Age Category</option>
+        <option value="bala">Bala (childhood: up to 16 years)</option>
+        <option value="madhya">Madhya (middle age: 16-70 years)</option>
+        <option value="vriddha">Vriddha (old age: above 70 years)</option>
+      </select>
+    </div>
+  </div>
+ 
+  <button type="submit">Submit Patient Form</button>
+</form>
+ 
+</body>
+</html>
