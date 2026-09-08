@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login</title>
+
+<style>
+  :root {
+    --paper: #efe9dd;
+    --card: #f9f6ee;
+    --ink: #20251f;
+    --muted: #70766d;
+    --line: #c9c0ac;
+    --accent: #5c6b4f;
+    --accent-dark: #46533c;
+    --accent-light: #e4eadf;
+    --danger: #a1462f;
+    --white: #ffffff;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 40px 24px;
+
+    background:
+      radial-gradient(
+        circle at top,
+        rgba(255,255,255,0.35),
+        transparent 45%
+      ),
+      var(--paper);
+
+    color: var(--ink);
+
+    font-family:
+      Georgia,
+      "Times New Roman",
+      serif;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ================= HEADER ================= */
+
+  .header {
+    width: 100%;
+    max-width: 1050px;
+
+    text-align: center;
+
+    margin-bottom: 35px;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header h1 {
+    margin: 0 0 10px;
+
+    font-size: 2.4rem;
+    font-weight: 400;
+
+    letter-spacing: 0.3px;
+  }
+
+  .header p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 1rem;
+  }
+
+
+  /* ================= MAIN ================= */
+
+  .verification-wrapper {
+    width: 100%;
+    max-width: 1050px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 24px;
+  }
+
+
+  /* ================= CARD ================= */
+
+  .card {
+    position: relative;
+
+    background: var(--card);
+
+    border: 1px solid var(--line);
+
+    border-radius: 10px;
+
+    padding: 34px;
+
+    box-shadow:
+      0 8px 25px rgba(0,0,0,0.06);
+  }
+
+  .step-number {
+    position: absolute;
+
+    top: 22px;
+    right: 24px;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--accent);
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.9rem;
+
+    font-weight: bold;
+  }
+
+  .card-title {
+    margin: 0;
+
+    font-size: 1.55rem;
+
+    font-weight: 500;
+  }
+
+  .card-description {
+    margin: 8px 0 30px;
+
+    color: var(--muted);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.85rem;
+
+    line-height: 1.5;
+  }
+
+
+  /* ================= INPUTS ================= */
+
+  .field {
+    margin-bottom: 22px;
+  }
+
+  .field label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.88rem;
+
+    font-weight: 600;
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  input {
+    width: 100%;
+
+    height: 54px;
+
+    padding: 0 16px;
+
+    border: 1px solid var(--line);
+
+    border-radius: 6px;
+
+    background: var(--white);
+
+    color: var(--ink);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 1rem;
+
+    outline: none;
+
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  input:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+      0 0 0 3px rgba(92,107,79,0.12);
+  }
+
+  .hint {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.72rem;
+  }
+
+
+  /* ================= BUTTON ================= */
+
+  .primary-button {
+    width: 100%;
+
+    height: 54px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: var(--accent);
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.95rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      background 0.2s,
+      transform 0.1s;
+  }
+
+  .primary-button:hover {
+    background: var(--accent-dark);
+  }
+
+  .primary-button:active {
+    transform: scale(0.98);
+  }
+
+  .primary-button:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+  }
+
+
+  /* ================= OTP CARD ================= */
+
+  .otp-card {
+    opacity: 0.45;
+
+    pointer-events: none;
+
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .otp-card.active {
+    opacity: 1;
+
+    pointer-events: auto;
+
+    transform: translateY(0);
+  }
+
+
+  /* ================= OTP MESSAGE ================= */
+
+  .otp-message {
+    display: none;
+
+    padding: 13px 15px;
+
+    margin-bottom: 24px;
+
+    border: 1px solid #c5cfb9;
+
+    border-radius: 6px;
+
+    background: var(--accent-light);
+
+    color: var(--accent-dark);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.82rem;
+
+    line-height: 1.4;
+  }
+
+  .otp-message.show {
+    display: block;
+  }
+
+
+  /* ================= OTP INPUT ================= */
+
+  .otp-input {
+    text-align: center;
+
+    letter-spacing: 12px;
+
+    font-size: 1.5rem;
+
+    font-weight: 600;
+
+    padding-left: 25px;
+  }
+
+
+  /* ================= COUNTDOWN ================= */
+
+  .timer {
+    margin-top: 14px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.78rem;
+  }
+
+  .timer strong {
+    color: var(--danger);
+  }
+
+
+  /* ================= RESEND ================= */
+
+  .resend {
+    margin-top: 18px;
+
+    text-align: center;
+  }
+
+  .resend button {
+    border: none;
+
+    background: none;
+
+    color: var(--danger);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.82rem;
+
+    text-decoration: underline;
+
+    cursor: pointer;
+  }
+
+  .resend button:disabled {
+    color: var(--muted);
+
+    cursor: not-allowed;
+  }
+
+
+  /* ================= STATUS ================= */
+
+  .status {
+    min-height: 20px;
+
+    margin-top: 15px;
+
+    text-align: center;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.8rem;
+  }
+
+  .status.error {
+    color: var(--danger);
+  }
+
+  .status.success {
+    color: var(--accent-dark);
+  }
+
+
+  /* ================= SECURITY ================= */
+
+  .security {
+    width: 100%;
+    max-width: 1050px;
+
+    margin-top: 25px;
+
+    padding: 15px 20px;
+
+    border: 1px solid var(--line);
+
+    border-radius: 6px;
+
+    background: rgba(255,255,255,0.3);
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.75rem;
+  }
+
+
+  /* ================= RESPONSIVE ================= */
+
+  @media (max-width: 760px) {
+
+    body {
+      padding: 25px 16px;
+    }
+
+    .verification-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .header h1 {
+      font-size: 1.9rem;
+    }
+
+    .card {
+      padding: 28px 22px;
+    }
+
+  }
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+  <h1>Patient Verification</h1>
+
+  <p>
+    Verify your identity securely before continuing
+  </p>
+
+</header>
+
+
+<!-- ================= TWO COLUMNS ================= -->
+
+<main class="verification-wrapper">
+
+
+  <!-- =========================================
+       COLUMN 1
+       ========================================= -->
+
+  <section class="card">
+
+    <div class="step-number">
+      1
+    </div>
+
+    <h2 class="card-title">
+      Identity Details
+    </h2>
+
+    <p class="card-description">
+      Enter your ABHA ID or Aadhaar number
+      to begin verification.
+    </p>
+
+
+    <!-- ABHA -->
+
+    <div class="field">
+
+      <label for="abha">
+        ABHA ID
+      </label>
+
+      <input
+        type="text"
+        id="abha"
+        placeholder="Enter your ABHA ID"
+        maxlength="17"
+        autocomplete="off"
+      >
+
+      <span class="hint">
+        Example: 12-3456-7890-1234
+      </span>
+
+    </div>
+
+
+    <!-- AADHAAR -->
+
+    <div class="field">
+
+      <label for="aadhaar">
+        Aadhaar Number
+      </label>
+
+      <input
+        type="password"
+        id="aadhaar"
+        placeholder="Enter 12-digit Aadhaar number"
+        maxlength="12"
+        inputmode="numeric"
+        autocomplete="off"
+      >
+
+      <span class="hint">
+        Enter the 12-digit Aadhaar number
+      </span>
+
+    </div>
+
+
+    <button
+      class="primary-button"
+      id="sendOtpButton"
+      onclick="sendOTP()"
+    >
+      Send OTP
+    </button>
+
+  </section>
+
+
+  <!-- =========================================
+       COLUMN 2
+       ========================================= -->
+
+  <section
+    class="card otp-card"
+    id="otpCard"
+  >
+
+    <div class="step-number">
+      2
+    </div>
+
+    <h2 class="card-title">
+      OTP Verification
+    </h2>
+
+    <p class="card-description">
+      Enter the 6-digit OTP sent to your
+      registered mobile number.
+    </p>
+
+
+    <!-- OTP MESSAGE -->
+
+    <div
+      class="otp-message"
+      id="otpMessage"
+    >
+      ✓ OTP sent successfully.
+      Please check your registered mobile number.
+    </div>
+
+
+    <!-- OTP INPUT -->
+
+    <div class="field">
+
+      <label for="otp">
+        One-Time Password
+      </label>
+
+      <input
+        type="text"
+        id="otp"
+        class="otp-input"
+        placeholder="••••••"
+        maxlength="6"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+      >
+
+    </div>
+
+
+    <!-- VERIFY -->
+
+    <button
+      class="primary-button"
+      id="verifyButton"
+      onclick="verifyOTP()"
+    >
+      Verify OTP
+    </button>
+
+
+    <!-- TIMER -->
+
+    <div
+      class="timer"
+      id="timer"
+    >
+      OTP expires in
+      <strong id="countdown">
+        02:00
+      </strong>
+    </div>
+
+
+    <!-- RESEND -->
+
+    <div class="resend">
+
+      <button
+        id="resendButton"
+        onclick="resendOTP()"
+        disabled
+      >
+        Resend OTP
+      </button>
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    <div
+      class="status"
+      id="status"
+    ></div>
+
+  </section>
+
+</main>
+<div>
+    <a href = "patient_form.html">If no ABHA ID click here</a>
+</div>
+
+
+<!-- ================= SECURITY ================= -->
+
+<div class="security">
+
+  🔒 Your information is handled securely.
+  Never share your OTP with anyone.
+
+</div>
+
+
+<script>
+
+  /*
+  ============================================================
+  FRONTEND OTP FLOW
+  ============================================================
+
+  This is currently FRONTEND ONLY.
+
+  Later these functions will communicate with:
+
+      Node.js + Express
+      +
+      Speakeasy
+
+  Example:
+
+      POST /api/request-otp
+
+      POST /api/verify-otp
+
+  ============================================================
+  */
+
+
+  let countdownInterval;
+
+  let remainingSeconds = 120;
+
+
+  /* ============================================================
+     SEND OTP
+     ============================================================ */
+
+  function sendOTP() {
+
+    const abha =
+      document
+        .getElementById("abha")
+        .value
+        .trim();
+
+    const aadhaar =
+      document
+        .getElementById("aadhaar")
+        .value
+        .trim();
+
+
+    const status =
+      document.getElementById("status");
+
+
+    status.textContent = "";
+
+    status.className = "status";
+
+
+    /* ----------------------------------------
+       Validation
+       ---------------------------------------- */
+
+    if (!abha && !aadhaar) {
+
+      showError(
+        "Please enter your ABHA ID or Aadhaar number."
+      );
+
+      return;
+    }
+
+
+    if (
+      aadhaar &&
+      !/^\d{12}$/.test(aadhaar)
+    ) {
+
+      showError(
+        "Please enter a valid 12-digit Aadhaar number."
+      );
+
+      return;
+    }
+
+
+    /* ----------------------------------------
+       Enable OTP section
+       ---------------------------------------- */
+
+    const otpCard =
+      document.getElementById("otpCard");
+
+    const otpMessage =
+      document.getElementById("otpMessage");
+
+
+    otpCard.classList.add("active");
+
+    otpMessage.classList.add("show");
+
+
+    /* ----------------------------------------
+       Start countdown
+       ---------------------------------------- */
+
+    startCountdown();
+
+
+    /* ----------------------------------------
+       Focus OTP input
+       ---------------------------------------- */
+
+    document
+      .getElementById("otp")
+      .focus();
+
+
+    /*
+      ==========================================================
+      LATER:
+
+      Replace this frontend simulation with:
+
+      fetch("/api/request-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          abha,
+          aadhaar
+        })
+      });
+
+      ==========================================================
+    */
+
+  }
+
+
+  /* ============================================================
+     VERIFY OTP
+     ============================================================ */
+
+  function verifyOTP() {
+
+    const otp =
+      document
+        .getElementById("otp")
+        .value
+        .trim();
+
+
+    if (!/^\d{6}$/.test(otp)) {
+
+      showError(
+        "Please enter the 6-digit OTP."
+      );
+
+      return;
+    }
+
+
+    /*
+      ==========================================================
+      LATER:
+
+      This will call:
+
+          POST /api/verify-otp
+
+      and Node.js + Speakeasy will verify it.
+
+      ==========================================================
+    */
+
+
+    showSuccess(
+      "OTP format is valid. Backend verification will be connected next."
+    );
+
+  }
+
+
+  /* ============================================================
+     RESEND OTP
+     ============================================================ */
+
+  function resendOTP() {
+
+    const resendButton =
+      document.getElementById("resendButton");
+
+
+    resendButton.disabled = true;
+
+
+    /*
+      Later:
+
+      fetch("/api/request-otp", {
+        method: "POST"
+      });
+
+    */
+
+
+    startCountdown();
+
+
+    showSuccess(
+      "A new OTP has been requested."
+    );
+
+  }
+
+
+  /* ============================================================
+     COUNTDOWN
+     ============================================================ */
+
+  function startCountdown() {
+
+    clearInterval(countdownInterval);
+
+
+    remainingSeconds = 120;
+
+
+    const countdown =
+      document.getElementById("countdown");
+
+    const resendButton =
+      document.getElementById("resendButton");
+
+
+    resendButton.disabled = true;
+
+
+    updateCountdown();
+
+
+    countdownInterval =
+      setInterval(() => {
+
+        remainingSeconds--;
+
+        updateCountdown();
+
+
+        if (remainingSeconds <= 0) {
+
+          clearInterval(countdownInterval);
+
+          resendButton.disabled = false;
+
+          countdown.textContent = "Expired";
+
+        }
+
+      }, 1000);
+
+  }
+
+
+  /* ============================================================
+     UPDATE COUNTDOWN
+     ============================================================ */
+
+  function updateCountdown() {
+
+    const minutes =
+      Math.floor(
+        remainingSeconds / 60
+      );
+
+    const seconds =
+      remainingSeconds % 60;
+
+
+    document
+      .getElementById("countdown")
+      .textContent =
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+  }
+
+
+  /* ============================================================
+     ERROR
+     ============================================================ */
+
+  function showError(message) {
+
+    const status =
+      document.getElementById("status");
+
+
+    status.textContent = message;
+
+    status.className =
+      "status error";
+
+  }
+
+
+  /* ============================================================
+     SUCCESS
+     ============================================================ */
+
+  function showSuccess(message) {
+
+    const status =
+      document.getElementById("status");
+
+
+    status.textContent = message;
+
+    status.className =
+      "status success";
+
+  }
+
+
+  /* ============================================================
+     ALLOW ONLY NUMBERS IN OTP
+     ============================================================ */
+
+  document
+    .getElementById("otp")
+    .addEventListener(
+      "input",
+      function () {
+
+        this.value =
+          this.value
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+      }
+    );
+
+
+  /* ============================================================
+     ALLOW ONLY NUMBERS IN AADHAAR
+     ============================================================ */
+
+  document
+    .getElementById("aadhaar")
+    .addEventListener(
+      "input",
+      function () {
+
+        this.value =
+          this.value
+            .replace(/\D/g, "")
+            .slice(0, 12);
+
+      }
+    );
+
+</script>
+
+</body>
+</html>
