@@ -67,10 +67,37 @@ app.post("/api/register", async (req, res) => {
     step: 300
   });
 
+  // Hash OTP before storing it
+  const otpHash = await bcrypt.hash(String(otp), 10);
+
+  // OTP expires after 5 minutes
+  const otpExpiresAt = new Date(
+    Date.now() + 5 * 60 * 1000
+  ).toISOString();
+
+  // Store user and OTP information in database
+  db.push(`/users/${userId}`, {
+    userId,
+    abhaId,
+    phone,
+    otpHash,
+    otpExpiresAt,
+    secret: secret.base32,
+    verified: false,
+    createdAt: new Date().toISOString()
+  });
+
+  // OTP Simulator
+  console.log("\n========== OTP SIMULATOR ==========");
+  console.log(`Sending OTP to: ${phone}`);
+  console.log(`Your OTP is: ${otp}`);
+  console.log("===================================\n");
+
   console.log(
     `[REGISTER] ABHA=${abhaId} phone=${phone} OTP=${otp}`
   );
 
+  // Response for development/testing
   res.status(201).json({
     message: "OTP generated successfully.",
     userId,

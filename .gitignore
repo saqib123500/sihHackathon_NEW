@@ -7,3 +7,5 @@ db.sqlite3
 .DS_Store
 node_modules/
 2fa/node_modules/
+google-credentials.json
+.env
