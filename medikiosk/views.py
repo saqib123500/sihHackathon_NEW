@@ -6,12 +6,21 @@ import random
 from .models import Patient
 
 
+# =============================================================
+# HOME
+# =============================================================
+
 def home(request):
+
     return render(
         request,
         "medikiosk/patient/home.html"
     )
 
+
+# =============================================================
+# LOGIN / OTP VERIFICATION
+# =============================================================
 
 def login_page(request):
 
@@ -47,22 +56,46 @@ def login_page(request):
                 )
 
             # -------------------------------------------------
-            # Generate a 6-digit OTP ourselves
+            # Generate OTP
             # -------------------------------------------------
 
-            otp = str(random.randint(100000, 999999))
+            otp = str(
+                random.randint(
+                    100000,
+                    999999
+                )
+            )
 
             request.session["pending_abha"] = abha
+
             request.session["pending_otp"] = otp
+
             request.session["otp_expires_at"] = (
-                timezone.now() + timedelta(minutes=2)
+                timezone.now()
+                + timedelta(minutes=2)
             ).isoformat()
+
             request.session.modified = True
 
-            print("\n========== OTP SIMULATOR ==========")
-            print(f"ABHA ID: {abha}")
-            print(f"Your OTP is: {otp}")
-            print("====================================\n")
+            # -------------------------------------------------
+            # OTP Simulator
+            # -------------------------------------------------
+
+            print(
+                "\n========== OTP SIMULATOR =========="
+            )
+
+            print(
+                f"ABHA ID: {abha}"
+            )
+
+            print(
+                f"Your OTP is: {otp}"
+            )
+
+            print(
+                "====================================\n"
+            )
 
             return render(
                 request,
@@ -106,7 +139,7 @@ def login_page(request):
                 )
 
             # -------------------------------------------------
-            # No OTP available
+            # No OTP
             # -------------------------------------------------
 
             if not expected_otp:
@@ -133,9 +166,21 @@ def login_page(request):
 
                 if timezone.now() >= expiry_time:
 
-                    request.session.pop("pending_abha", None)
-                    request.session.pop("pending_otp", None)
-                    request.session.pop("otp_expires_at", None)
+                    request.session.pop(
+                        "pending_abha",
+                        None
+                    )
+
+                    request.session.pop(
+                        "pending_otp",
+                        None
+                    )
+
+                    request.session.pop(
+                        "otp_expires_at",
+                        None
+                    )
+
                     request.session.modified = True
 
                     return render(
@@ -148,7 +193,7 @@ def login_page(request):
                     )
 
             # -------------------------------------------------
-            # WRONG OTP
+            # Wrong OTP
             # -------------------------------------------------
 
             if otp != expected_otp:
@@ -173,19 +218,33 @@ def login_page(request):
             # Clear temporary OTP information
             # -------------------------------------------------
 
-            request.session.pop("pending_abha", None)
-            request.session.pop("pending_otp", None)
-            request.session.pop("otp_expires_at", None)
+            request.session.pop(
+                "pending_abha",
+                None
+            )
+
+            request.session.pop(
+                "pending_otp",
+                None
+            )
+
+            request.session.pop(
+                "otp_expires_at",
+                None
+            )
+
             request.session.modified = True
 
             # -------------------------------------------------
-            # Go to Patient Form
+            # Go directly to Patient Form
             # -------------------------------------------------
 
-            return redirect("patient_form")
+            return redirect(
+                "patient_form"
+            )
 
     # =========================================================
-    # NORMAL LOGIN PAGE
+    # DISPLAY LOGIN PAGE
     # =========================================================
 
     return render(
@@ -201,13 +260,18 @@ def login_page(request):
 def patient_form(request):
 
     # ---------------------------------------------------------
-    # Make sure the patient has verified ABHA first
+    # CHECK ABHA VERIFICATION
     # ---------------------------------------------------------
 
-    verified_abha = request.session.get("verified_abha")
+    verified_abha = request.session.get(
+        "verified_abha"
+    )
 
     if not verified_abha:
-        return redirect("login")
+
+        return redirect(
+            "login"
+        )
 
     # =========================================================
     # SAVE PATIENT
@@ -215,17 +279,36 @@ def patient_form(request):
 
     if request.method == "POST":
 
-        Patient.objects.create(
+        patient = Patient.objects.create(
 
             # -------------------------------------------------
             # Basic Details
             # -------------------------------------------------
 
-            name=request.POST.get("name", ""),
-            age=request.POST.get("age", ""),
-            gender=request.POST.get("gender", ""),
-            contact=request.POST.get("contact", ""),
-            address=request.POST.get("address", ""),
+            name=request.POST.get(
+                "name",
+                ""
+            ),
+
+            age=request.POST.get(
+                "age",
+                ""
+            ),
+
+            gender=request.POST.get(
+                "gender",
+                ""
+            ),
+
+            contact=request.POST.get(
+                "contact",
+                ""
+            ),
+
+            address=request.POST.get(
+                "address",
+                ""
+            ),
 
             # -------------------------------------------------
             # Verified ABHA
@@ -237,22 +320,64 @@ def patient_form(request):
             # Chief Complaint
             # -------------------------------------------------
 
-            complaint=request.POST.get("complaint", ""),
+            complaint=request.POST.get(
+                "complaint",
+                ""
+            ),
 
             # -------------------------------------------------
             # Dashavidha Pariksha
             # -------------------------------------------------
 
-            prakriti=request.POST.get("prakriti", ""),
-            vikriti=request.POST.get("vikriti", ""),
-            sara=request.POST.get("sara", ""),
-            samhanana=request.POST.get("samhanana", ""),
-            pramana=request.POST.get("pramana", ""),
-            satmya=request.POST.get("satmya", ""),
-            satva=request.POST.get("satva", ""),
-            ahara_shakti=request.POST.get("ahara_shakti", ""),
-            vyayama_shakti=request.POST.get("vyayama_shakti", ""),
-            vaya=request.POST.get("vaya", ""),
+            prakriti=request.POST.get(
+                "prakriti",
+                ""
+            ),
+
+            vikriti=request.POST.get(
+                "vikriti",
+                ""
+            ),
+
+            sara=request.POST.get(
+                "sara",
+                ""
+            ),
+
+            samhanana=request.POST.get(
+                "samhanana",
+                ""
+            ),
+
+            pramana=request.POST.get(
+                "pramana",
+                ""
+            ),
+
+            satmya=request.POST.get(
+                "satmya",
+                ""
+            ),
+
+            satva=request.POST.get(
+                "satva",
+                ""
+            ),
+
+            ahara_shakti=request.POST.get(
+                "ahara_shakti",
+                ""
+            ),
+
+            vyayama_shakti=request.POST.get(
+                "vyayama_shakti",
+                ""
+            ),
+
+            vaya=request.POST.get(
+                "vaya",
+                ""
+            ),
 
             # -------------------------------------------------
             # Verification Status
@@ -262,17 +387,29 @@ def patient_form(request):
         )
 
         # -----------------------------------------------------
+        # Store Patient ID
+        # -----------------------------------------------------
+
+        request.session["patient_id"] = patient.id
+
+        # -----------------------------------------------------
         # Remove verified ABHA after patient is saved
         # -----------------------------------------------------
 
-        request.session.pop("verified_abha", None)
+        request.session.pop(
+            "verified_abha",
+            None
+        )
+
         request.session.modified = True
 
         # -----------------------------------------------------
-        # Return to home
+        # Go to Medical Documents
         # -----------------------------------------------------
 
-        return redirect("home")
+        return redirect(
+            "medical_documents"
+        )
 
     # =========================================================
     # DISPLAY PATIENT FORM

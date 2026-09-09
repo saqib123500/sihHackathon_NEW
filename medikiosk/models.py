@@ -55,6 +55,9 @@ class Patient(models.Model):
     is_verified = models.BooleanField(
         default=False
     )
+    is_confirmed = models.BooleanField(
+        default=False
+)
 
     otp_expires_at = models.DateTimeField(
         null=True,
@@ -65,6 +68,41 @@ class Patient(models.Model):
         auto_now_add=True
     )
 
+
+class MedicalDocument(models.Model):
+
+    patient = models.ForeignKey(
+        Patient,
+        on_delete=models.CASCADE,
+        related_name="medical_documents"
+    )
+
+    document = models.FileField(
+        upload_to="medical_documents/"
+    )
+
+    document_type = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    raw_text = models.TextField(
+        blank=True
+    )
+
+    structured_data = models.JSONField(
+        default=dict,
+        blank=True
+    )
+
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return f"{self.patient.name} - {self.document.name}"
+    
+    
     def __str__(self):
         return f"{self.name} - {self.abha}"
     

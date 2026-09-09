@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Verification Successful</title>
+    <title>Medical Documents</title>
 
     <style>
         * {
@@ -25,44 +25,28 @@
 
         .container {
             width: 90%;
-            max-width: 600px;
+            max-width: 700px;
             background: white;
-            padding: 50px;
+            padding: 45px;
             border-radius: 14px;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 25px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 50%;
-            background: #dcfce7;
-
-            color: #16a34a;
-            font-size: 42px;
-            font-weight: bold;
-        }
-
         h1 {
-            margin: 0 0 15px;
+            margin-top: 0;
             color: #1f2937;
         }
 
         p {
-            margin-bottom: 30px;
             color: #6b7280;
-            font-size: 18px;
+            font-size: 17px;
+            line-height: 1.6;
         }
 
         .button {
             display: inline-block;
+            margin-top: 20px;
             padding: 14px 28px;
 
             background: #2563eb;
@@ -78,54 +62,47 @@
             background: #1d4ed8;
         }
 
-        .continue-button {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 14px 28px;
-    background: #2563eb;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 16px;
-}
+        .skip {
+            display: block;
+            margin-top: 20px;
+            color: #6b7280;
+            text-decoration: none;
+        }
 
-.continue-button:hover {
-    background: #1d4ed8;
-}
+        .skip:hover {
+            color: #374151;
+        }
     </style>
 </head>
 
 <body>
-    
 
     <div class="container">
 
-        <div class="icon">
-            ✓
-        </div>
-
-        <h1>Verification Successful</h1>
+        <h1>Medical Documents</h1>
 
         <p>
-            Your ABHA ID has been successfully verified.
+            Do you have any previous medical reports,
+            prescriptions, or other medical documents?
         </p>
 
         <a
-            href="{% url 'patient_form' %}"
+            href="{% url 'medical_document_upload' %}"
             class="button"
         >
-            Continue
+            Upload Medical Document
+        </a>
+
+        <a
+            href="{% url 'home' %}"
+            class="skip"
+        >
+            Skip for now
         </a>
 
     </div>
 
-    <a
-    href="{% url 'medical_document_upload' %}"
-    class="continue-button"
->
-    Continue to Medical Documents
-</a>
-
 </body>
 
 </html>
+
