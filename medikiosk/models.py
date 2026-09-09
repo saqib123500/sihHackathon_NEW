@@ -1,6 +1,6 @@
+
 from django.db import models
 
-# Create your models here.
 
 class Patient(models.Model):
     GENDER_CHOICES = [
@@ -10,9 +10,9 @@ class Patient(models.Model):
     ]
 
     VAYA_CHOICES = [
-        ("childhood", "Childhood"),
-        ("middle_age", "Middle Age"),
-        ("old_age", "Old Age"),
+        ("bala", "Bala"),
+        ("madhya", "Madhya"),
+        ("vriddha", "Vriddha"),
     ]
 
     # Basic Details
@@ -21,7 +21,14 @@ class Patient(models.Model):
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES)
     contact = models.CharField(max_length=15)
     address = models.TextField()
-    abha = models.CharField(max_length=50, blank=True)
+
+    # ABHA
+    abha = models.CharField(
+        max_length=14,
+        blank=True,
+        db_index=True
+    )
+
     complaint = models.TextField()
 
     # Dashavidha Pariksha
@@ -34,9 +41,31 @@ class Patient(models.Model):
     satva = models.TextField()
     ahara_shakti = models.TextField()
     vyayama_shakti = models.TextField()
-    vaya = models.CharField(max_length=20, choices=VAYA_CHOICES)
+    vaya = models.CharField(
+        max_length=20,
+        choices=VAYA_CHOICES
+    )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    # Verification
+    otp = models.CharField(
+        max_length=6,
+        blank=True
+    )
+
+    is_verified = models.BooleanField(
+        default=False
+    )
+
+    otp_expires_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.abha}"
+    
+    
